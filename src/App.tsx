@@ -18,6 +18,13 @@ import {Layout} from "@/components/refine-ui/layout/layout.tsx";
 import SubjectsList from "@/pages/subjects/list.tsx";
 import SubjectsCreate from "@/pages/subjects/create.tsx";
 
+/**
+ * Root application component that configures providers, routing, and global UI integrations.
+ *
+ * Sets up the browser router, theme, Refine configuration (data provider, notification provider, router provider, options, and resources), developer tools, keyboard shortcut UI, layout routes for Dashboard and Subjects, and global utilities like toasts, unsaved-changes notifier, and document title handling.
+ *
+ * @returns The React element tree for the application's root.
+ */
 function App() {
   return (
     <BrowserRouter>
