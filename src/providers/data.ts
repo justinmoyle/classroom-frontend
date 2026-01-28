@@ -2,6 +2,10 @@ import { createDataProvider, CreateDataProviderOptions } from '@refinedev/rest';
 import { BACKEND_BASE_URL } from '@/components/constants';
 import { ListResponse } from '@/types';
 
+if (!BACKEND_BASE_URL) {
+  throw new Error('VITE_BACKEND_BASE_URL environment variable is not set');
+}
+
 const options: CreateDataProviderOptions = {
   getList: {
     getEndpoint: ({ resource }) => resource,
@@ -25,17 +29,19 @@ const options: CreateDataProviderOptions = {
     },
 
     mapResponse: async (response) => {
-      const payload: ListResponse = await response.json();
+      const payload: ListResponse = await response.clone().json();
 
       return payload.data ?? [];
     },
 
     getTotalCount: async (response) => {
-      if ('pagination' in response && response.pagination) {
-        return (response.pagination as { total: number }).total;
+      const payload: ListResponse = await response.clone().json();
+
+      if (payload.pagination) {
+        return payload.pagination.total;
       }
-      if ('data' in response && Array.isArray(response.data)) {
-        return response.data.length;
+      if (Array.isArray(payload.data)) {
+        return payload.data.length;
       }
       return 0;
     },
