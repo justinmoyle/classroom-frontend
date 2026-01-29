@@ -11,7 +11,7 @@ import { CreateView } from '@/components/refine-ui/views/create-view';
 import { Breadcrumb } from '@/components/refine-ui/layout/breadcrumb';
 
 import { Textarea } from '@/components/ui/textarea';
-import { useBack, useList } from '@refinedev/core';
+import { useBack, useList, useNotification } from '@refinedev/core';
 import { Loader2 } from 'lucide-react';
 import { classSchema } from '@/lib/schema';
 import UploadWidget from '@/components/upload-widget';
@@ -41,11 +41,16 @@ const ClassesCreate = () => {
 
   const bannerPublicId = form.watch('bannerCldPubId');
 
+  const { open } = useNotification();
   const onSubmit = async (values: z.infer<typeof classSchema>) => {
     try {
       await onFinish(values);
     } catch (error) {
-      console.error('Error creating class:', error);
+      open?.({
+        type: 'error',
+        message: 'Error',
+        description: 'Failed to create class',
+      });
     }
   };
 

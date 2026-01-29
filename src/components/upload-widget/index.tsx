@@ -30,6 +30,10 @@ function UploadWidget({
         clientAllowedFormats: ['png', 'jpg', 'jpeg'],
       },
       (error, result) => {
+        if (error) {
+          console.error('Failed to upload image to Cloudinary', error);
+          return;
+        }
         if (!error && result.event === 'success') {
           const payload: UploadWidgetValue = {
             url: result.info.secure_url,
@@ -62,7 +66,15 @@ function UploadWidget({
   useEffect(() => {
     if (initializeWidget()) return;
 
+    let attempts = 0;
+    const maxAttempts = 20; // 10 Seconds Max
     const intervalId = window.setInterval(() => {
+      attempts++;
+      if (attempts >= maxAttempts) {
+        console.error('Cloudinary SDK failed to load after maximum attempts');
+        window.clearInterval(intervalId);
+        return;
+      }
       if (initializeWidget()) {
         window.clearInterval(intervalId);
       }
@@ -103,20 +115,25 @@ function UploadWidget({
         const params = new URLSearchParams();
         params.append('token', deleteToken);
 
-        await fetch(
+        const response = await fetch(
           `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/delete_by_token`,
           {
             method: 'POST',
             body: params,
           },
         );
+        if (!response.ok) {
+          throw new Error(`Delete fail with status ${response.status}`);
+        }
       }
-    } catch (error) {
-      console.error('Failed to remove image from Cloudinary', error);
-    } finally {
+      // Only clear state on success or when no delete token is present
       setPreview(null);
       setDeleteToken(null);
       onChangeRef.current?.(null);
+    } catch (error) {
+      console.error('Failed to remove image from Cloudinary', error);
+      // Don't clear state on error - image still exists in Cloudinary
+    } finally {
       setIsRemoving(false);
     }
   };

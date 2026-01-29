@@ -48,6 +48,7 @@ export const classSchema = z.object({
       required_error: 'Capacity is required',
       invalid_type_error: 'Capacity is required',
     })
+    .int({ message: 'Capacity must be a whole number' })
     .min(1, 'Capacity must be at least 1'),
   status: z.enum(['active', 'inactive']),
   bannerUrl: z
