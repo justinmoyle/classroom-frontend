@@ -29,6 +29,13 @@ const ClassesCreate = () => {
     },
     defaultValues: {
       status: 'active',
+      subjectId: '',
+      teacherId: '',
+      name: '',
+      capacity: undefined,
+      description: '',
+      bannerUrl: '',
+      bannerCldPubId: '',
     },
   });
 
@@ -185,7 +192,7 @@ const ClassesCreate = () => {
                           onValueChange={(value) =>
                             field.onChange(Number(value))
                           }
-                          value={field.value?.toString()}
+                          value={field.value?.toString() || ''}
                           disabled={subjectsLoading}
                         >
                           <FormControl>
@@ -219,7 +226,7 @@ const ClassesCreate = () => {
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          value={field.value?.toString()}
+                          value={field.value?.toString() || ''}
                           disabled={teachersLoading}
                         >
                           <FormControl>
@@ -280,7 +287,7 @@ const ClassesCreate = () => {
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          value={field.value}
+                          value={field.value || ''}
                         >
                           <FormControl>
                             <SelectTrigger className="w-full">
