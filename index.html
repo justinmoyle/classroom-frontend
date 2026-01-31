@@ -2,6 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
+    <script type="text/javascript">
+        (function (w, d, s, r, k, h, m) {
+            if (w.performance && w.performance.timing && w.performance.navigation && !w.s247r) {
+                w[r] = w[r] || function () {
+                    (w[r].q = w[r].q || []).push(arguments)
+                };
+                h = d.createElement('script');
+                h.async = true;
+                h.setAttribute('src', s + k);
+                d.getElementsByTagName('head')[0].appendChild(h);
+                (m = window.onerror), (window.onerror = function (b, c, d, f, g) {
+                    m && m(b, c, d, f, g), g || (g = new Error(b)), (w[r].q = w[r].q || []).push(["captureException", g]);
+                })
+            }
+        })(window, document, '//static.site24x7rum.com/beacon/site24x7rum-min.js?appKey=', 's247r', '53ee327226b46b1d8117dc54af28ea8d');
+    </script>
     <link href="/favicon.ico" rel="icon"/>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <meta content="#000000" name="theme-color"/>
@@ -20,24 +36,9 @@
             name="twitter:image"
     />
     <meta content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://static.site24x7rum.com https://upload-widget.cloudinary.com;
+               img-src 'self' data: https://static.site24x7rum.com https://refine.dev;
                connect-src 'self' https://col.site24x7rum.com https://classroom-backend-production-dd9c.up.railway.app;"
           http-equiv="Content-Security-Policy">
-    <script type="text/javascript">
-        (function (w, d, s, r, k, h, m) {
-            if (w.performance && w.performance.timing && w.performance.navigation && !w.s247r) {
-                w[r] = w[r] || function () {
-                    (w[r].q = w[r].q || []).push(arguments)
-                };
-                h = d.createElement('script');
-                h.async = true;
-                h.setAttribute('src', s + k);
-                d.getElementsByTagName('head')[0].appendChild(h);
-                (m = window.onerror), (window.onerror = function (b, c, d, f, g) {
-                    m && m(b, c, d, f, g), g || (g = new Error(b)), (w[r].q = w[r].q || []).push(["captureException", g]);
-                })
-            }
-        })(window, document, '//static.site24x7rum.com/beacon/site24x7rum-min.js?appKey=', 's247r', 'fd928a1852214342d056b3ad961dcf90');
-    </script>
     <title>
         Refine - Build your React-based CRUD applications, without constraints.
     </title>
