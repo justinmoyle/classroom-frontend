@@ -28,6 +28,10 @@ type EditButtonProps = {
    * `meta` property is used when creating the URL for the related action and path.
    */
   meta?: Record<string, unknown>;
+  /**
+   * Hide the label of the button.
+   */
+  hideText?: boolean;
 } & React.ComponentProps<typeof Button>;
 
 export const EditButton = React.forwardRef<
@@ -35,7 +39,16 @@ export const EditButton = React.forwardRef<
   EditButtonProps
 >(
   (
-    { resource, recordItemId, accessControl, meta, children, onClick, ...rest },
+    {
+      resource,
+      recordItemId,
+      accessControl,
+      meta,
+      children,
+      onClick,
+      hideText,
+      ...rest
+    },
     ref
   ) => {
     const { hidden, disabled, LinkComponent, to, label } = useEditButton({
@@ -69,7 +82,7 @@ export const EditButton = React.forwardRef<
           {children ?? (
             <div className="flex items-center gap-2 font-semibold">
               <Pencil className="h-4 w-4" />
-              <span>{label}</span>
+              {!hideText && <span>{label}</span>}
             </div>
           )}
         </LinkComponent>

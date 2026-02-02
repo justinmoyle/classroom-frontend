@@ -18,11 +18,29 @@ import { Breadcrumb } from '@/components/refine-ui/layout/breadcrumb';
 import { DataTable } from '@/components/refine-ui/data-table/data-table';
 import { ClassDetails, Subject, User } from '@/types';
 import { useList } from '@refinedev/core';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { ShowButton } from '@/components/refine-ui/buttons/show.tsx';
+import { useEffect } from 'react';
 
 const ClassesListPage = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialSearch = searchParams.get('search') || '';
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
+
+  useEffect(() => {
+    setSearchQuery(searchParams.get('search') || '');
+  }, [searchParams]);
+
+  useEffect(()=> {
+    const params = new URLSearchParams(searchParams);
+    if (searchQuery) {
+      params.set('search', searchQuery);
+    } else {
+      params.delete('search');
+    }
+    setSearchParams(params, { replace: true });
+  }, [searchQuery, setSearchParams]);
+
   const [selectedSubject, setSelectedSubject] = useState('all');
   const [selectedTeacher, setSelectedTeacher] = useState('all');
 
