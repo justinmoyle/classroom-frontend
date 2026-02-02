@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge.tsx';
 import { ShowButton } from '@/components/refine-ui/buttons/show.tsx';
 import { useTable } from '@refinedev/react-table';
 import { ListView } from '@/components/refine-ui/views/list-view.tsx';
-import { Breadcrumb } from '@/components/ui/breadcrumb.tsx';
+import { Breadcrumb } from '@/components/refine-ui/layout/breadcrumb';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/refine-ui/data-table/data-table.tsx';

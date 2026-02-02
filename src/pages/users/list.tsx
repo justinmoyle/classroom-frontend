@@ -35,7 +35,7 @@ const UsersListPage = () => {
         cell: ({ row }) => (
           <div className="flex items-center justify-center ml-2">
             <img
-              src={row.original.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${row.original.email}`}
+              src={row.original.image || `https://api.dicebear.com/7.x/avataaars/svg?seed=${row.original.id}`}
               alt={row.original.name}
               className="w-10 h-10 rounded-full object-cover border"
             />
@@ -139,40 +139,38 @@ const UsersListPage = () => {
   return (
     <div className="flex flex-col gap-6 p-6">
       <div className="flex flex-col gap-2">
-        <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Users' }]} />
+        <Breadcrumb />
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold tracking-tight">Users</h1>
-          <CreateButton icon={<UserPlus className="h-4 w-4 mr-2" />}>Add User</CreateButton>
+          <CreateButton icon={<UserPlus className="h-4 w-4 mr-2" />}>
+            Add User
+          </CreateButton>
         </div>
       </div>
 
-      <ListView
-        tableQueryResult={tableQueryResult}
-        filters={
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by name or email..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-            <Select value={selectedRole} onValueChange={setSelectedRole}>
-              <SelectTrigger className="w-full sm:w-[180px]">
-                <SelectValue placeholder="Filter by role" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Roles</SelectItem>
-                <SelectItem value="admin">Admin</SelectItem>
-                <SelectItem value="teacher">Teacher</SelectItem>
-                <SelectItem value="student">Student</SelectItem>
-              </SelectContent>
-            </Select>
+      <ListView>
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by name or email..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
           </div>
-        }
-      >
+          <Select value={selectedRole} onValueChange={setSelectedRole}>
+            <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectValue placeholder="Filter by role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Roles</SelectItem>
+              <SelectItem value="admin">Admin</SelectItem>
+              <SelectItem value="teacher">Teacher</SelectItem>
+              <SelectItem value="student">Student</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <DataTable table={table} tableProps={tableProps} />
       </ListView>
     </div>

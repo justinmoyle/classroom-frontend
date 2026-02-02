@@ -60,7 +60,7 @@ const UsersCreate = () => {
 
   return (
     <CreateView className="p-6">
-      <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: 'Users', href: '/users' }, { label: 'Create' }]} />
+      <Breadcrumb />
 
       <h1 className="text-3xl font-bold tracking-tight mt-4">Create a User</h1>
       <div className="flex items-center justify-between mt-2 mb-6">

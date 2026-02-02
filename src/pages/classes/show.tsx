@@ -239,14 +239,14 @@ const ClassesShow = () => {
         </Button>
       </Card>
 
-      {/*<Card className="hover:shadow-md transition-shadow">*/}
-      {/*  <CardHeader className="flex flex-row items-center justify-between">*/}
-      {/*    <CardTitle>Enrolled Students</CardTitle>*/}
-      {/*  </CardHeader>*/}
-      {/*  <CardContent>*/}
-      {/*    <DataTable table={studentsTable} paginationVariant="simple" />*/}
-      {/*  </CardContent>*/}
-      {/*</Card>*/}
+      <Card className="hover:shadow-md transition-shadow">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle>Enrolled Students</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DataTable table={studentsTable} paginationVariant="simple" />
+        </CardContent>
+      </Card>
     </ShowView>
   );
 };

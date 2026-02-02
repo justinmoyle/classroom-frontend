@@ -75,14 +75,6 @@ function App() {
                   },
                 },
                 {
-                  name: 'users',
-                  list: '/users',
-                  create: '/users/create',
-                  edit: '/users/edit/:id',
-                  show: '/users/show/:id',
-                  meta: { label: 'Users', icon: <Users /> },
-                },
-                {
                   name: 'classes',
                   list: '/classes',
                   create: '/classes/create',
@@ -113,11 +105,6 @@ function App() {
                   <Route path="faculty">
                     <Route index element={<FacultyList />} />
                     <Route path="show/:id" element={<FacultyShow />} />
-                  </Route>
-                  <Route path="users">
-                    <Route index element={<UsersList />} />
-                    <Route path="create" element={<UsersCreate />} />
-                    <Route path="show/:id" element={<UsersEdit />} />
                   </Route>
                   <Route path="classes">
                     <Route index element={<ClassesList />} />

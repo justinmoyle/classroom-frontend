@@ -96,12 +96,7 @@ const DepartmentsList = () => {
   const searchFilters = searchQuery
     ? [
         {
-          field: 'name',
-          operator: 'contains' as const,
-          value: searchQuery,
-        },
-        {
-          field: 'code',
+          field: 'search',
           operator: 'contains' as const,
           value: searchQuery,
         },

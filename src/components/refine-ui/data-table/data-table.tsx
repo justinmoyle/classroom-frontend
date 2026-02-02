@@ -20,35 +20,13 @@ import { cn } from "@/lib/utils";
 
 type DataTableProps<TData extends BaseRecord> = {
   table: UseTableReturnType<TData, HttpError>;
-  tableProps?: any;
   paginationVariant?: "default" | "simple";
 };
 
 export function DataTable<TData extends BaseRecord>({
   table,
-  tableProps,
   paginationVariant = "default",
 }: DataTableProps<TData>) {
-  if (!table || !table.reactTable) {
-    return null;
-  }
-
-  const {
-    reactTable: { getHeaderGroups, getRowModel, getAllColumns },
-    refineCore: {
-      tableQuery,
-      currentPage,
-      setCurrentPage,
-      pageCount,
-      pageSize,
-      setPageSize,
-    },
-  } = table;
-
-  const columns = getAllColumns();
-  const leafColumns = table.reactTable.getAllLeafColumns();
-  const isLoading = tableQuery.isLoading;
-
   const tableContainerRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLTableElement>(null);
   const [isOverflowing, setIsOverflowing] = useState({
@@ -84,7 +62,27 @@ export function DataTable<TData extends BaseRecord>({
       window.removeEventListener("resize", checkOverflow);
       clearTimeout(timeoutId);
     };
-  }, [tableQuery.data?.data, pageSize]);
+  }, [table?.refineCore?.tableQuery?.data?.data, table?.refineCore?.pageSize]);
+
+  if (!table || !table.reactTable) {
+    return null;
+  }
+
+  const {
+    reactTable: { getHeaderGroups, getRowModel, getAllColumns },
+    refineCore: {
+      tableQuery,
+      currentPage,
+      setCurrentPage,
+      pageCount,
+      pageSize,
+      setPageSize,
+    },
+  } = table;
+
+  const columns = getAllColumns();
+  const leafColumns = table.reactTable.getAllLeafColumns();
+  const isLoading = tableQuery.isLoading;
 
   return (
     <div className={cn("flex", "flex-col", "flex-1", "gap-4")}>

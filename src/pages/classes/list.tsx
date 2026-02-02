@@ -30,6 +30,17 @@ const ClassesListPage = () => {
   useEffect(() => {
     setSearchQuery(searchParams.get('search') || '');
   }, [searchParams]);
+
+  useEffect(()=> {
+    const params = new URLSearchParams(searchParams);
+    if (searchQuery) {
+      params.set('search', searchQuery);
+    } else {
+      params.delete('search');
+    }
+    setSearchParams(params, { replace: true });
+  }, [searchQuery, setSearchParams]);
+
   const [selectedSubject, setSelectedSubject] = useState('all');
   const [selectedTeacher, setSelectedTeacher] = useState('all');
 
