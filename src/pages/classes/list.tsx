@@ -18,6 +18,8 @@ import { Breadcrumb } from '@/components/refine-ui/layout/breadcrumb';
 import { DataTable } from '@/components/refine-ui/data-table/data-table';
 import { ClassDetails, Subject, User } from '@/types';
 import { useList } from '@refinedev/core';
+import { Link } from 'react-router';
+import { ShowButton } from '@/components/refine-ui/buttons/show.tsx';
 
 const ClassesListPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -144,6 +146,22 @@ const ClassesListPage = () => {
           <span className="text-foreground">{getValue<number>()}</span>
         ),
       },
+      {
+        id: 'details',
+        accessorKey: 'details',
+        size: 140,
+        header: () => <p className="column-title">Details</p>,
+        cell: ({ row }) => (
+          <ShowButton
+            resource="classes"
+            recordItemId={row.original.id}
+            variant="outline"
+            size="sm"
+          >
+            View Details
+          </ShowButton>
+        ),
+      },
     ],
     []
   );
@@ -154,7 +172,8 @@ const ClassesListPage = () => {
       resource: 'classes',
       pagination: {
         pageSize: 10,
-        mode: 'server', },
+        mode: 'server',
+      },
       filters: {
         // Compose refine filters from the current UI selections.
         permanent: [...subjectFilters, ...teacherFilters, ...searchFilters],
