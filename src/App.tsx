@@ -1,9 +1,9 @@
 import { Refine } from '@refinedev/core';
 import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
 import { RefineKbar, RefineKbarProvider } from '@refinedev/kbar';
-
+import { Authenticated } from '@refinedev/core';
 import routerProvider, {
-  DocumentTitleHandler,
+  DocumentTitleHandler, NavigateToResource,
   UnsavedChangesNotifier,
 } from '@refinedev/react-router';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router';
@@ -13,7 +13,14 @@ import { useNotificationProvider } from './components/refine-ui/notification/use
 import { ThemeProvider } from './components/refine-ui/theme/theme-provider';
 import { dataProvider } from './providers/data.ts';
 import Dashboard from '@/pages/dashboard.tsx';
-import { BookOpen, GraduationCap, Home, Building2, Users } from 'lucide-react';
+import {
+  BookOpen,
+  GraduationCap,
+  Home,
+  Building2,
+  Users,
+  ClipboardCheck,
+} from 'lucide-react';
 import { Layout } from '@/components/refine-ui/layout/layout.tsx';
 import SubjectsList from '@/pages/subjects/list.tsx';
 import SubjectsCreate from '@/pages/subjects/create.tsx';
@@ -29,6 +36,11 @@ import UsersCreate from '@/pages/users/create.tsx';
 import UsersEdit from '@/pages/users/edit.tsx';
 import FacultyList from '@/pages/faculty/list.tsx';
 import FacultyShow from '@/pages/faculty/show.tsx';
+import EnrollmentsCreate from '@/pages/enrollments/create.tsx';
+import EnrollmentsJoin from '@/pages/enrollments/join.tsx';
+import EnrollmentConfirm from '@/pages/enrollments/confirm.tsx';
+import { Login } from '@/pages/login';
+import { Register } from '@/pages/register';
 
 function App() {
   return (
@@ -75,6 +87,12 @@ function App() {
                   },
                 },
                 {
+                  name: 'enrollments',
+                  list: '/enrollments/create',
+                  create: '/enrollments/create',
+                  meta: { label: 'Enrollments', icon: <ClipboardCheck /> },
+                },
+                {
                   name: 'classes',
                   list: '/classes',
                   create: '/classes/create',
@@ -84,6 +102,17 @@ function App() {
               ]}
             >
               <Routes>
+                <Route
+                  element=
+                  {
+                    <Authenticated key="public-routes" fallback={<Outlet />}>
+                      <NavigateToResource fallbackTo="/" />
+                    </Authenticated>
+                  }
+                >
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                </Route>
                 <Route
                   element={
                     <Layout>
@@ -105,6 +134,11 @@ function App() {
                   <Route path="faculty">
                     <Route index element={<FacultyList />} />
                     <Route path="show/:id" element={<FacultyShow />} />
+                  </Route>
+                  <Route path="enrollments">
+                    <Route path="create" element={<EnrollmentsCreate />} />
+                    <Route path="join" element={<EnrollmentsJoin />} />
+                    <Route path="confirm" element={<EnrollmentConfirm />} />
                   </Route>
                   <Route path="classes">
                     <Route index element={<ClassesList />} />
