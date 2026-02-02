@@ -3,6 +3,7 @@ import { Trash, UploadCloud } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '../ui/button.tsx';
 import { UploadWidgetProps, UploadWidgetValue } from '@/types';
+import { getOptimizedCloudinaryUrl } from '@/lib/utils';
 
 function UploadWidget({
                         value = null,
@@ -28,6 +29,12 @@ function UploadWidget({
         folder: 'uploads',
         maxFileSize: 5_000_000,
         clientAllowedFormats: ['png', 'jpg', 'jpeg'],
+        cropping: true,
+        croppingAspectRatio: 1,
+        showSkipCropButton: false,
+        croppingShowBackButton: true,
+        resourceType: 'image',
+        sources: ['local', 'url', 'camera'],
       },
       (error, result) => {
         if (error) {
@@ -66,12 +73,20 @@ function UploadWidget({
   useEffect(() => {
     if (initializeWidget()) return;
 
+    // Fallback: Try to inject the script if it's missing for some reason
+    if (typeof window !== 'undefined' && !document.querySelector('script[src*="cloudinary"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://upload-widget.cloudinary.com/latest/global/all.js';
+      script.async = true;
+      document.head.appendChild(script);
+    }
+
     let attempts = 0;
-    const maxAttempts = 20; // 10 Seconds Max
+    const maxAttempts = 40; // 20 Seconds Max (increased from 10)
     const intervalId = window.setInterval(() => {
       attempts++;
       if (attempts >= maxAttempts) {
-        console.error('Cloudinary SDK failed to load after maximum attempts');
+        console.error('Cloudinary SDK failed to load after maximum attempts. Please check your internet connection or if an ad-blocker is blocking Cloudinary.');
         window.clearInterval(intervalId);
         return;
       }
@@ -142,7 +157,10 @@ function UploadWidget({
     <div className="space-y-2">
       {preview ? (
         <div className="upload-preview">
-          <img src={preview.url} alt="Uploaded file" />
+          <img
+            src={getOptimizedCloudinaryUrl(preview.url)}
+            alt="Uploaded file"
+          />
 
           <Button
             type="button"

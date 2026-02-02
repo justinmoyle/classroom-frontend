@@ -15,6 +15,7 @@ import { Breadcrumb } from '@/components/refine-ui/layout/breadcrumb';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { DataTable } from '@/components/refine-ui/data-table/data-table.tsx';
+import { getOptimizedCloudinaryUrl } from '@/lib/utils';
 
 const FacultyList = () => {
   const [searchParams] = useSearchParams();
@@ -35,7 +36,12 @@ const FacultyList = () => {
           return (
             <div className="flex items-center gap-3">
               <Avatar>
-                {image && <AvatarImage src={image} alt={name} />}
+                {image && (
+                  <AvatarImage
+                    src={getOptimizedCloudinaryUrl(image)}
+                    alt={name}
+                  />
+                )}
                 <AvatarFallback>{getInitials(name)}</AvatarFallback>
               </Avatar>
               <span className="text-foreground">{name}</span>

@@ -98,16 +98,18 @@ export const SignInForm = () => {
 
         <CardContent className={cn("px-0")}>
           <form onSubmit={handleSignIn}>
-            <div className={cn("flex", "flex-col", "gap-2")}>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder=""
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+            <div className={cn("flex", "flex-col", "gap-4")}>
+              <div className={cn("flex", "flex-col", "gap-2")}>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder=""
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
             </div>
             <div
               className={cn("relative", "flex", "flex-col", "gap-2", "mt-6")}

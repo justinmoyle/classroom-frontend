@@ -1,5 +1,5 @@
 import { Refine } from '@refinedev/core';
-import { DevtoolsPanel, DevtoolsProvider } from '@refinedev/devtools';
+import { DevtoolsProvider } from '@refinedev/devtools';
 import { RefineKbar, RefineKbarProvider } from '@refinedev/kbar';
 import { Authenticated } from '@refinedev/core';
 import routerProvider, {
@@ -31,16 +31,15 @@ import ClassesShow from '@/pages/classes/show.tsx';
 import DepartmentsList from '@/pages/departments/list.tsx';
 import DepartmentsCreate from '@/pages/departments/create.tsx';
 import DepartmentShow from '@/pages/departments/show.tsx';
-import UsersList from '@/pages/users/list.tsx';
-import UsersCreate from '@/pages/users/create.tsx';
-import UsersEdit from '@/pages/users/edit.tsx';
 import FacultyList from '@/pages/faculty/list.tsx';
 import FacultyShow from '@/pages/faculty/show.tsx';
+import ProfilePage from '@/pages/profile/index.tsx';
 import EnrollmentsCreate from '@/pages/enrollments/create.tsx';
 import EnrollmentsJoin from '@/pages/enrollments/join.tsx';
 import EnrollmentConfirm from '@/pages/enrollments/confirm.tsx';
 import { Login } from '@/pages/login';
 import { Register } from '@/pages/register';
+import { authProvider } from '@/providers/auth.ts';
 
 function App() {
   return (
@@ -50,6 +49,7 @@ function App() {
           <DevtoolsProvider>
             <Refine
               dataProvider={dataProvider}
+              authProvider={authProvider}
               notificationProvider={useNotificationProvider()}
               routerProvider={routerProvider}
               options={{
@@ -115,9 +115,11 @@ function App() {
                 </Route>
                 <Route
                   element={
+                  <Authenticated key="private-routes" fallback={<Login/>}>
                     <Layout>
                       <Outlet />
                     </Layout>
+                  </Authenticated>
                   }
                 >
                   <Route path="/" element={<Dashboard />} />
@@ -135,6 +137,7 @@ function App() {
                     <Route index element={<FacultyList />} />
                     <Route path="show/:id" element={<FacultyShow />} />
                   </Route>
+                  <Route path="profile" element={<ProfilePage />} />
                   <Route path="enrollments">
                     <Route path="create" element={<EnrollmentsCreate />} />
                     <Route path="join" element={<EnrollmentsJoin />} />
@@ -152,7 +155,6 @@ function App() {
               <UnsavedChangesNotifier />
               <DocumentTitleHandler />
             </Refine>
-            <DevtoolsPanel />
           </DevtoolsProvider>
         </ThemeProvider>
       </RefineKbarProvider>

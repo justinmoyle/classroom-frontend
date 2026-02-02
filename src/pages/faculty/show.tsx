@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DataTable } from '@/components/refine-ui/data-table/data-table';
 import { ShowButton } from '@/components/refine-ui/buttons/show';
+import { getOptimizedCloudinaryUrl } from '@/lib/utils';
 import {
   ShowView,
   ShowViewHeader,
@@ -220,7 +221,12 @@ const FacultyShow = () => {
         <CardContent className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
             <Avatar className="size-12">
-              {user.image && <AvatarImage src={user.image} alt={user.name} />}
+              {user.image && (
+                <AvatarImage
+                  src={getOptimizedCloudinaryUrl(user.image)}
+                  alt={user.name}
+                />
+              )}
               <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
             <div>

@@ -22,11 +22,18 @@ import {
   useRefineOptions,
   useRegister,
 } from "@refinedev/core";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ROLE_OPTIONS, USER_ROLES } from "@/constants";
+import UploadWidget from "@/components/upload-widget";
+import { UploadWidgetValue } from "@/types";
 
 export const SignUpForm = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState(USER_ROLES.STUDENT);
+  const [image, setImage] = useState<UploadWidgetValue | null>(null);
 
   const { open } = useNotification();
 
@@ -51,8 +58,12 @@ export const SignUpForm = () => {
     }
 
     register({
+      name,
       email,
       password,
+      role,
+      image: image?.url,
+      imageCldPubId: image?.publicId,
     });
   };
 
@@ -113,16 +124,57 @@ export const SignUpForm = () => {
 
         <CardContent className={cn("px-0")}>
           <form onSubmit={handleSignUp}>
-            <div className={cn("flex", "flex-col", "gap-2")}>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder=""
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+            <div className={cn("flex", "flex-col", "gap-4")}>
+              <div className={cn("flex", "flex-col", "gap-2")}>
+                <Label>I am a...</Label>
+                <Tabs
+                  value={role}
+                  onValueChange={(value) => setRole(value)}
+                  className="w-full"
+                >
+                  <TabsList className="grid w-full grid-cols-2">
+                    {ROLE_OPTIONS.filter(
+                      (option) => option.value !== USER_ROLES.ADMIN
+                    ).map((option) => (
+                      <TabsTrigger key={option.value} value={option.value}>
+                        {option.label}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                </Tabs>
+              </div>
+
+              <div className={cn("flex", "flex-col", "gap-2")}>
+                <Label htmlFor="name">Full Name</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder="John Doe"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+
+              <div className={cn("flex", "flex-col", "gap-2")}>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder=""
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className={cn("flex", "flex-col", "gap-2")}>
+                <Label>Profile Photo</Label>
+                <UploadWidget
+                  value={image}
+                  onChange={(val) => setImage(val)}
+                />
+              </div>
             </div>
 
             <div
