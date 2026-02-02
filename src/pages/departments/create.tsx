@@ -22,9 +22,7 @@ import {
 const departmentSchema = z.object({
   code: z.string().min(2, 'Department code must be at least 2 characters'),
   name: z.string().min(3, 'Department name must be at least 3 characters'),
-  description: z
-    .string()
-    .min(5, 'Department description must be at least 5 characters'),
+  description: z.string().optional(),
 });
 
 type DepartmentFormValues = z.infer<typeof departmentSchema>;
@@ -124,14 +122,13 @@ const DepartmentsCreate = () => {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>
-                        Description <span className="text-orange-600">*</span>
-                      </FormLabel>
+                      <FormLabel>Description</FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Describe the department focus..."
                           className="min-h-28"
                           {...field}
+                          value={field.value ?? ''}
                         />
                       </FormControl>
                       <FormMessage />

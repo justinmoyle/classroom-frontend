@@ -37,7 +37,13 @@ type ClassListItem = {
   };
 };
 
-const roleColors = ['#f97316', '#0ea5e9', '#22c55e', '#a855f7'];
+const roleColors = [
+  'var(--chart-1)',
+  'var(--chart-2)',
+  'var(--chart-3)',
+  'var(--chart-4)',
+  'var(--chart-5)',
+];
 
 const Dashboard = () => {
   const Link = useLink();
@@ -166,37 +172,37 @@ const Dashboard = () => {
       label: 'Total Users',
       value: users.length,
       icon: Users,
-      accent: 'text-blue-600',
+      accent: 'text-primary',
     },
     {
       label: 'Teachers',
       value: users.filter((user) => user.role === 'teacher').length,
       icon: GraduationCap,
-      accent: 'text-emerald-600',
+      accent: 'text-chart-1',
     },
     {
       label: 'Admins',
       value: users.filter((user) => user.role === 'admin').length,
       icon: ShieldCheck,
-      accent: 'text-amber-600',
+      accent: 'text-chart-2',
     },
     {
       label: 'Subjects',
       value: subjects.length,
       icon: BookOpen,
-      accent: 'text-purple-600',
+      accent: 'text-chart-3',
     },
     {
       label: 'Departments',
       value: departments.length,
       icon: Building2,
-      accent: 'text-cyan-600',
+      accent: 'text-chart-4',
     },
     {
       label: 'Classes',
       value: classes.length,
       icon: Layers,
-      accent: 'text-rose-600',
+      accent: 'text-chart-5',
     },
   ];
 
@@ -327,7 +333,7 @@ const Dashboard = () => {
                   <Tooltip />
                   <Bar
                     dataKey="totalSubjects"
-                    fill="#f97316"
+                    fill="var(--chart-1)"
                     radius={[6, 6, 0, 0]}
                   />
                 </BarChart>
@@ -347,7 +353,7 @@ const Dashboard = () => {
                   <Tooltip />
                   <Bar
                     dataKey="totalClasses"
-                    fill="#0ea5e9"
+                    fill="var(--chart-2)"
                     radius={[6, 6, 0, 0]}
                   />
                 </BarChart>

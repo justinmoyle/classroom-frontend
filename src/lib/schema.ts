@@ -14,9 +14,7 @@ export const facultySchema = z.object({
 export const subjectSchema = z.object({
   name: z.string().min(3, 'Subject name must be at least 3 characters'),
   code: z.string().min(2, 'Subject code must be at least 2 characters'),
-  description: z
-    .string()
-    .min(5, 'Subject description must be at least 5 characters'),
+  description: z.string().optional(),
   departmentId: z.coerce
     .number({
       required_error: 'Department is required',
@@ -42,9 +40,7 @@ export const classSchema = z.object({
     .string()
     .min(2, 'Class name must be at least 2 characters')
     .max(50, 'Class name must be at most 50 characters'),
-  description: z
-    .string({ required_error: 'Description is required' })
-    .min(5, 'Description must be at least 5 characters'),
+  description: z.string().optional(),
   subjectId: z.coerce
     .number({
       required_error: 'Subject is required',

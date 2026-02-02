@@ -55,7 +55,7 @@ export const authProvider: AuthProvider = {
       });
 
       if (error) {
-        console.error('Login error from auth client:', error);
+        console.error('Login error from auth client:', JSON.stringify(error, null, 2));
         return {
           success: false,
           error: {
