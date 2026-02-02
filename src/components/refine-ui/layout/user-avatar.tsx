@@ -5,7 +5,7 @@ import { cn, getOptimizedCloudinaryUrl } from "@/lib/utils";
 import { useGetIdentity } from "@refinedev/core";
 import { User } from "@/types";
 
-function AvatarImageWithRetry({ src, alt, key }: { src: string; alt: string; key?: string }) {
+function AvatarImageWithRetry({ src, alt }: { src: string; alt: string }) {
   const [hasError, setHasError] = React.useState(false);
 
   React.useEffect(() => {
@@ -18,7 +18,6 @@ function AvatarImageWithRetry({ src, alt, key }: { src: string; alt: string; key
 
   return (
     <AvatarImage
-      key={key}
       src={src}
       alt={alt}
       onError={() => setHasError(true)}

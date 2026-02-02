@@ -132,8 +132,10 @@ export const SignUpForm = () => {
                   onValueChange={(value) => setRole(value)}
                   className="w-full"
                 >
-                  <TabsList className="grid w-full grid-cols-3">
-                    {ROLE_OPTIONS.map((option) => (
+                  <TabsList className="grid w-full grid-cols-2">
+                    {ROLE_OPTIONS.filter(
+                      (option) => option.value !== USER_ROLES.ADMIN
+                    ).map((option) => (
                       <TabsTrigger key={option.value} value={option.value}>
                         {option.label}
                       </TabsTrigger>

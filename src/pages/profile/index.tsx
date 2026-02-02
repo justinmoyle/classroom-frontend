@@ -42,11 +42,21 @@ const ProfilePage = () => {
     if (!user?.id) return;
 
     try {
+      // If email has changed, use changeEmail instead of updateUser
+      if (email !== user.email) {
+        const { error: changeEmailError } = await authClient.changeEmail({
+          newEmail: email,
+        });
+
+        if (changeEmailError) {
+          throw new Error(changeEmailError.message || "Failed to change email");
+        }
+      }
+
       // Use authClient to update the user profile so better-auth session is also updated
       const { error: authError } = await authClient.updateUser({
         name,
         image: image?.url,
-        // @ts-ignore - imageCldPubId is an additional field
         imageCldPubId: image?.publicId,
       });
 
