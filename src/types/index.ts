@@ -80,7 +80,7 @@ export type User = {
   role: UserRole;
   image?: string;
   imageCldPubId?: string;
-  department?: string;
+  departmentId?: number;
 };
 
 export type Schedule = {

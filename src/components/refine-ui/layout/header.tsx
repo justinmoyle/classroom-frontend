@@ -13,10 +13,12 @@ import {
   useLogout,
   useRefineOptions,
 } from "@refinedev/core";
-import { LogOutIcon, Search } from "lucide-react";
+import { LogOutIcon, Search, UserIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useGetIdentity } from "@refinedev/core";
+import { User } from "@/types";
 
 export const Header = () => {
   const { isMobile } = useSidebar();
@@ -75,6 +77,8 @@ function DesktopHeader() {
 
 function MobileHeader() {
   const { open, isMobile } = useSidebar();
+
+
 
   const { title } = useRefineOptions();
 
@@ -147,7 +151,11 @@ function MobileHeader() {
 const UserDropdown = () => {
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
 
+  const navigate = useNavigate();
+
   const authProvider = useActiveAuthProvider();
+
+  const { data: user } = useGetIdentity<User>();
 
   if (!authProvider?.getIdentity) {
     return null;
@@ -160,6 +168,16 @@ const UserDropdown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => {
+            navigate("/profile");
+          }}
+        >
+          <UserIcon className="size-4 mr-2" />
+          <span className="font-medium">Profile</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
           onClick={() => {
             logout();
           }}
