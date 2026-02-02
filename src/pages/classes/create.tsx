@@ -4,14 +4,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 import { CreateView } from '@/components/refine-ui/views/create-view';
 import { Breadcrumb } from '@/components/refine-ui/layout/breadcrumb';
 
 import { Textarea } from '@/components/ui/textarea';
-import { useBack, useList, useNotification } from '@refinedev/core';
+import { useBack, useList } from '@refinedev/core';
 import { Loader2 } from 'lucide-react';
 import { classSchema } from '@/lib/schema';
 import UploadWidget from '@/components/upload-widget';
@@ -29,13 +42,6 @@ const ClassesCreate = () => {
     },
     defaultValues: {
       status: 'active',
-      subjectId: '',
-      teacherId: '',
-      name: '',
-      capacity: undefined,
-      description: '',
-      bannerUrl: '',
-      bannerCldPubId: '',
     },
   });
 
@@ -48,16 +54,11 @@ const ClassesCreate = () => {
 
   const bannerPublicId = form.watch('bannerCldPubId');
 
-  const { open } = useNotification();
   const onSubmit = async (values: z.infer<typeof classSchema>) => {
     try {
       await onFinish(values);
     } catch (error) {
-      open?.({
-        type: 'error',
-        message: 'Error',
-        description: 'Failed to create class',
-      });
+      console.error('Error creating class:', error);
     }
   };
 
@@ -128,9 +129,9 @@ const ClassesCreate = () => {
                           value={
                             field.value
                               ? {
-                                url: field.value,
-                                publicId: bannerPublicId ?? '',
-                              }
+                                  url: field.value,
+                                  publicId: bannerPublicId ?? '',
+                                }
                               : null
                           }
                           onChange={(file) => {
@@ -192,7 +193,7 @@ const ClassesCreate = () => {
                           onValueChange={(value) =>
                             field.onChange(Number(value))
                           }
-                          value={field.value?.toString() || ''}
+                          value={field.value?.toString()}
                           disabled={subjectsLoading}
                         >
                           <FormControl>
@@ -226,7 +227,7 @@ const ClassesCreate = () => {
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          value={field.value?.toString() || ''}
+                          value={field.value?.toString()}
                           disabled={teachersLoading}
                         >
                           <FormControl>
@@ -287,7 +288,7 @@ const ClassesCreate = () => {
                         </FormLabel>
                         <Select
                           onValueChange={field.onChange}
-                          value={field.value || ''}
+                          value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger className="w-full">

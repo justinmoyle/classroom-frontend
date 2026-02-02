@@ -20,11 +20,19 @@ import { cn } from "@/lib/utils";
 
 type DataTableProps<TData extends BaseRecord> = {
   table: UseTableReturnType<TData, HttpError>;
+  tableProps?: any;
+  paginationVariant?: "default" | "simple";
 };
 
 export function DataTable<TData extends BaseRecord>({
   table,
+  tableProps,
+  paginationVariant = "default",
 }: DataTableProps<TData>) {
+  if (!table || !table.reactTable) {
+    return null;
+  }
+
   const {
     reactTable: { getHeaderGroups, getRowModel, getAllColumns },
     refineCore: {
@@ -206,6 +214,7 @@ export function DataTable<TData extends BaseRecord>({
           pageSize={pageSize}
           setPageSize={setPageSize}
           total={tableQuery.data?.total}
+          variant={paginationVariant}
         />
       )}
     </div>

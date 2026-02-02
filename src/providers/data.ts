@@ -1,5 +1,5 @@
 import { createDataProvider, CreateDataProviderOptions } from '@refinedev/rest';
-import { BACKEND_BASE_URL } from '@/components/constants';
+import { BACKEND_BASE_URL } from '@/constants';
 import { CreateResponse, GetOneResponse, ListResponse } from '@/types';
 import { HttpError } from '@refinedev/core';
 
@@ -11,9 +11,14 @@ const buildHttpError = async (response: Response): Promise<HttpError> => {
   let message = 'Request failed.';
 
   try {
-    const payload = (await response.json()) as { message?: string };
-
-    if (payload?.message) message = payload.message;
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      const payload = (await response.json()) as { message?: string; error?: string };
+      message = payload.message || payload.error || message;
+    } else {
+      const text = await response.text();
+      message = `Server returned non-JSON response: ${text.substring(0, 100)}...`;
+    }
   } catch {
     //Ignore error
   }
@@ -108,6 +113,21 @@ const options: CreateDataProviderOptions = {
       const json: GetOneResponse = await response.json();
 
       return json.data ?? null;
+    },
+  },
+
+  getCustom: {
+    getEndpoint: ({ url }) => url,
+    mapResponse: async (response) => {
+      if (!response.ok) throw await buildHttpError(response);
+      
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+         throw await buildHttpError(response);
+      }
+
+      const json = await response.json();
+      return json.data;
     },
   }
 };
