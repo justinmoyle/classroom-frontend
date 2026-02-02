@@ -17,14 +17,9 @@ export const bannerPhoto = (imageCldPubId: string, name: string) => {
     .delivery(quality('auto'))
     .overlay(
       source(
-        text(
-          encodeURIComponent(name),
-          new TextStyle('Arial', 42).fontWeight('bold')
-        ).textColor('white')
-      ).position(
-        new Position()
-          .gravity(compass('west'))
-        .offsetX(0.02)
-      )
+        text(name, new TextStyle('Arial', 42).fontWeight('bold')).textColor(
+          'white'
+        )
+      ).position(new Position().gravity(compass('west')).offsetX(0.02))
     );
 };
