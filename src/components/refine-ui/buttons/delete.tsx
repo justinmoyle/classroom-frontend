@@ -9,6 +9,7 @@ import {
 import { type BaseKey, useDeleteButton } from "@refinedev/core";
 import { Loader2, Trash } from "lucide-react";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 type DeleteButtonProps = {
   /**
@@ -81,13 +82,24 @@ export const DeleteButton = React.forwardRef<
   const confirmOkText = defaultConfirmOkLabel;
   const confirmTitle = defaultConfirmTitle;
 
+  // Determine trigger appearance: allow passing `variant` to override; default to a themed ghost button
+  const userVariant = (rest as any).variant as string | undefined;
+  const triggerVariant = userVariant ?? "ghost";
+  const triggerClassName = cn(
+    (rest as any).className,
+    triggerVariant !== "destructive"
+      ? "text-destructive hover:bg-destructive/10 dark:hover:bg-destructive/20"
+      : undefined,
+  );
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <span>
           <Button
-            variant="destructive"
             {...rest}
+            variant={triggerVariant as any}
+            className={triggerClassName}
             ref={ref}
             disabled={isDisabled}
           >

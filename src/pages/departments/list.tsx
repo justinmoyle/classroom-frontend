@@ -9,6 +9,7 @@ import { ListView } from '@/components/refine-ui/views/list-view';
 import { Breadcrumb } from '@/components/refine-ui/layout/breadcrumb';
 import { DataTable } from '@/components/refine-ui/data-table/data-table';
 import { ShowButton } from '@/components/refine-ui/buttons/show';
+import { DeleteButton } from '@/components/refine-ui/buttons/delete';
 import { CreateButton } from '@/components/refine-ui/buttons/create';
 
 type DepartmentListItem = {
@@ -76,17 +77,26 @@ const DepartmentsList = () => {
       },
       {
         id: 'details',
-        size: 140,
-        header: () => <p className="column-title">Details</p>,
+        size: 180,
+        header: () => <p className="column-title">Actions</p>,
         cell: ({ row }) => (
-          <ShowButton
-            resource="departments"
-            recordItemId={row.original.id}
-            variant="outline"
-            size="sm"
-          >
-            View
-          </ShowButton>
+          <div className="flex items-center gap-2">
+            <ShowButton
+              resource="departments"
+              recordItemId={row.original.id}
+              variant="outline"
+              size="sm"
+            >
+              View
+            </ShowButton>
+            <DeleteButton
+              resource="departments"
+              recordItemId={row.original.id}
+              size="sm"
+            >
+              Delete
+            </DeleteButton>
+          </div>
         ),
       },
     ],

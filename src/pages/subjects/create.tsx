@@ -3,6 +3,7 @@ import { useForm } from '@refinedev/react-hook-form';
 import {
   useBack,
   useList,
+  useNotification,
   type BaseRecord,
   type HttpError,
 } from '@refinedev/core';
@@ -56,7 +57,7 @@ const SubjectsCreate = () => {
       action: 'create',
     },
     defaultValues: {
-      departmentId: 0,
+      departmentId: undefined,
       name: '',
       code: '',
       description: '',
@@ -69,6 +70,8 @@ const SubjectsCreate = () => {
     formState: { isSubmitting },
     control,
   } = form;
+
+  const { open } = useNotification();
 
   const { query: departmentsQuery } = useList<Department>({
     resource: 'departments',
@@ -83,8 +86,16 @@ const SubjectsCreate = () => {
   const onSubmit = async (values: SubjectFormValues) => {
     try {
       await onFinish(values);
+      open?.({
+        type: 'success',
+        message: 'Subject created successfully.',
+      });
     } catch (error) {
       console.error('Error creating subject:', error);
+      open?.({
+        type: 'error',
+        message: 'Failed to create subject. Please try again.',
+      });
     }
   };
 

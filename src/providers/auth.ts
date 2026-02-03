@@ -109,45 +109,69 @@ export const authProvider: AuthProvider = {
     return { error };
   },
   check: async () => {
-    const { data: session } = await authClient.getSession();
+    try {
+      const { data: session } = await authClient.getSession();
 
-    if (session) {
+      if (session) {
+        return {
+          authenticated: true,
+        };
+      }
+
       return {
-        authenticated: true,
+        authenticated: false,
+        logout: true,
+        redirectTo: '/login',
+        error: {
+          name: 'Unauthorized',
+          message: 'Check failed',
+        },
+      };
+    } catch (error) {
+      console.error('Auth check failed (network or server error):', error);
+      // Resolve with an unauthenticated response to avoid unhandled promise rejections in refine
+      return {
+        authenticated: false,
+        logout: true,
+        redirectTo: '/login',
+        error: {
+          name: 'Network Error',
+          message: 'Unable to reach authentication server',
+        },
       };
     }
-
-    return {
-      authenticated: false,
-      logout: true,
-      redirectTo: '/login',
-      error: {
-        name: 'Unauthorized',
-        message: 'Check failed',
-      },
-    };
   },
   getPermissions: async () => {
-    const { data: session } = await authClient.getSession();
+    try {
+      const { data: session } = await authClient.getSession();
 
-    if (!session?.user) return null;
+      if (!session?.user) return null;
 
-    return {
-      role: session.user.role,
-    };
+      return {
+        role: session.user.role,
+      };
+    } catch (error) {
+      console.error('getPermissions failed:', error);
+      return null;
+    }
   },
   getIdentity: async () => {
-    const { data: session } = await authClient.getSession();
+    try {
+      const { data: session } = await authClient.getSession();
 
-    if (!session?.user) return null;
+      if (!session?.user) return null;
 
-    return {
-      id: session.user.id,
-      name: session.user.name,
-      email: session.user.email,
-      image: session.user.image,
-      role: session.user.role,
-      imageCldPubId: session.user.imageCldPubId,
-    } as User;
+      return {
+        id: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+        image: session.user.image,
+        role: session.user.role,
+        imageCldPubId: session.user.imageCldPubId,
+      } as User;
+    } catch (error) {
+      console.error('getIdentity failed:', error);
+      return null;
+    }
   },
 };
