@@ -100,10 +100,17 @@ export const authProvider: AuthProvider = {
     };
   },
   onError: async (error) => {
-    if (error.statusCode === 401 || error.response?.status === 401) {
+    const status = (error as any)?.statusCode ?? (error as any)?.response?.status;
+
+    if (status === 401) {
       return {
         logout: true,
       };
+    }
+
+    // Don't treat 429 (rate limit) as an auth failure that should logout the user
+    if (status === 429) {
+      return { error };
     }
 
     return { error };

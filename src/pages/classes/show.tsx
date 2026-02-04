@@ -99,6 +99,15 @@ const ClassesShow = () => {
       },
       queryOptions: {
         enabled: !!classDetails,
+        retry: (failureCount: number, error: any) => {
+          const status =
+            (error as any)?.statusCode ?? (error as any)?.response?.status;
+          if (status === 429) return false;
+          return failureCount < 2;
+        },
+        retryDelay: 1000,
+        staleTime: 1000 * 30,
+        refetchOnWindowFocus: false,
       },
     },
   });
@@ -111,8 +120,8 @@ const ClassesShow = () => {
           {query.isLoading
             ? 'Loading class details...'
             : query.isError
-              ? 'Failed to load class details.'
-              : 'Class details not found.'}
+            ? 'Failed to load class details.'
+            : 'Class details not found.'}
         </p>
       </ShowView>
     );
@@ -244,7 +253,12 @@ const ClassesShow = () => {
           <CardTitle>Enrolled Students</CardTitle>
         </CardHeader>
         <CardContent>
-          <DataTable table={studentsTable} paginationVariant="simple" />
+          <DataTable
+            table={studentsTable}
+            paginationVariant="simple"
+            noDataText={'No students currently enrolled'}
+            noDataSubtext={'Click the Join Class button to enroll now'}
+          />
         </CardContent>
       </Card>
     </ShowView>

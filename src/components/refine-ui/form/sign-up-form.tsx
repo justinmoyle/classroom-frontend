@@ -116,7 +116,7 @@ export const SignUpForm = () => {
           <CardDescription
             className={cn("text-muted-foreground", "font-medium")}
           >
-            Welcome to lorem ipsum dolor.
+            Welcome to the classroom dashboard.
           </CardDescription>
         </CardHeader>
 
@@ -165,14 +165,6 @@ export const SignUpForm = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-
-              <div className={cn("flex", "flex-col", "gap-2")}>
-                <Label>Profile Photo</Label>
-                <UploadWidget
-                  value={image}
-                  onChange={(val) => setImage(val)}
                 />
               </div>
             </div>

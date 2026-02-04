@@ -26,20 +26,28 @@ const ClassesListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialSearch = searchParams.get('search') || '';
   const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [debouncedSearch, setDebouncedSearch] = useState(initialSearch);
 
   useEffect(() => {
     setSearchQuery(searchParams.get('search') || '');
   }, [searchParams]);
 
-  useEffect(()=> {
+  // Debounce user typing to avoid firing a request on every keystroke
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(searchQuery), 300);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
+
+  // Sync URL based on the debounced value (reduces rapid URL updates)
+  useEffect(() => {
     const params = new URLSearchParams(searchParams);
-    if (searchQuery) {
-      params.set('search', searchQuery);
+    if (debouncedSearch) {
+      params.set('search', debouncedSearch);
     } else {
       params.delete('search');
     }
     setSearchParams(params, { replace: true });
-  }, [searchQuery, setSearchParams]);
+  }, [debouncedSearch, setSearchParams]);
 
   const [selectedSubject, setSelectedSubject] = useState('all');
   const [selectedTeacher, setSelectedTeacher] = useState('all');
@@ -47,11 +55,22 @@ const ClassesListPage = () => {
   const { query: subjectQuery } = useList<Subject>({
     resource: 'subjects',
     pagination: { pageSize: 100 },
+    queryOptions: {
+      // cache for 5 minutes and don't retry on failures to avoid flooding the server
+      staleTime: 1000 * 60 * 5,
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
   });
 
   const { query: teacherQuery } = useList<User>({
     resource: 'users',
     pagination: { pageSize: 100 },
+    queryOptions: {
+      staleTime: 1000 * 60 * 5,
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
   });
 
   const subjects = subjectQuery?.data?.data || [];
@@ -203,6 +222,18 @@ const ClassesListPage = () => {
             order: 'desc',
           },
         ],
+      },
+      queryOptions: {
+        // prevent retries when server returns 429 and keep retries small otherwise
+        retry: (failureCount: number, error: any) => {
+          const status =
+            (error as any)?.statusCode ?? (error as any)?.response?.status;
+          if (status === 429) return false;
+          return failureCount < 2;
+        },
+        retryDelay: 1000,
+        staleTime: 1000 * 30,
+        refetchOnWindowFocus: false,
       },
     },
   });
