@@ -67,7 +67,7 @@ export const authProvider: AuthProvider = {
 
       return {
         success: true,
-        redirectTo: '/',
+        redirectTo: '/dashboard',
       };
     } catch (error) {
       console.error('Login exception:', error);
